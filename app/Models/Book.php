@@ -18,4 +18,8 @@ class Book extends Model
     public function genre() {
         return $this->belongsTo(Genre::class);
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }
