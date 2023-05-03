@@ -30,10 +30,10 @@ class DatabaseSeeder extends Seeder
         $g2 = Genre::create(['genrename'=>'thriller']);
         $g3 = Genre::create(['genrename'=>'romance']);
        
-        $a1 = Author::create(['name'=>'J.K.Rowling']);
-        $a2 = Author::create(['name'=>'Agatha Christie']);
-        $a3 = Author::create(['name'=>'Jane Austen']);
-        $a4 = Author::create(['name'=>'F Scott Fitzgerald']);
+        $a1 = Author::create(['authorname'=>'J.K.Rowling']);
+        $a2 = Author::create(['authorname'=>'Agatha Christie']);
+        $a3 = Author::create(['authorname'=>'Jane Austen']);
+        $a4 = Author::create(['authorname'=>'F Scott Fitzgerald']);
         
         $b1 = Book::create([
             'name'=>'Harry Potter and the Prisoner of Azkaban',
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             'genre_id'=>$g1->id,
             'description'=>'Its Harrys third school year Hogwarts where he and his friends Ron and Hermione investigate the case od Serius Black.',
             'user_id'=>1,
-            'year'=>'1999'
+            'year'=>'1999' 
         ]);
         $b2 = Book::create([
             'name'=>'Harry Potter and the Order od Phoenix',
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
             'author_id'=>$a2->id,
             'genre_id'=>$g2->id,
             'description'=>'An American tycoon lies dead in his compartment, stabbed a dozen times, his door locked from the inside.',
-            'user_id'=>1,
+            'user_id'=>2,
             'year'=>'1934'
         ]);
         $b4 = Book::create([
@@ -64,7 +64,31 @@ class DatabaseSeeder extends Seeder
             'author_id'=>$a3->id,
             'genre_id'=>$g3->id,
             'description'=>'Turbulent relationship between Elizabeth Bennet, the daughter of a country gentleman, and Fitzwilliam Darcy, a rich aristocratic landowner.',
-            'user_id'=>1,
+            'user_id'=>3,
+            'year'=>'2017'
+        ]);
+        $b5 = Book::create([
+            'name'=>'The Great Gatsby',
+            'author_id'=>$a4->id,
+            'genre_id'=>$g3->id,
+            'description'=>'Set in Jazz Age New York, the novel tells the tragic story of Jay Gatsby, a self-made millionaire, and his pursuit of Daisy Buchanan.',
+            'user_id'=>2,
+            'year'=>'1925'
+        ]);
+        $b6 = Book::create([
+            'name'=>'Death on the Nile',
+            'author_id'=>$a2->id,
+            'genre_id'=>$g2->id,
+            'description'=>'In World War I, the young Hercule Poirot devises a strategy to help the Allied forces reclaim land against the Central Powers.',
+            'user_id'=>3,
+            'year'=>'2017'
+        ]);
+        $b7 = Book::create([
+            'name'=>'Harry Potter and the Philosophers Stone',
+            'author_id'=>$a1->id,
+            'genre_id'=>$g1->id,
+            'description'=>'It is a story about Harry Potter, an orphan brought up by his aunt and uncle because his parents were killed when he was a baby.',
+            'user_id'=>3,
             'year'=>'2017'
         ]);
         
