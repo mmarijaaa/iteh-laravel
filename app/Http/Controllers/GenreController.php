@@ -6,6 +6,7 @@ use App\Models\Genre;
 use App\Http\Requests\StoreGenreRequest;
 use App\Http\Requests\UpdateGenreRequest;
 use App\Http\Resources\GenreResource;
+use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
@@ -25,6 +26,16 @@ class GenreController extends Controller
         //
     }
 
+
+    public function createNewGenre(Request $request) {
+
+        $genre = new Genre();
+
+        $genre->genrename = $request->input('genrename');
+
+        $genre->save();
+        return response()->json($genre);    
+    } 
     /**
      * Store a newly created resource in storage.
      */

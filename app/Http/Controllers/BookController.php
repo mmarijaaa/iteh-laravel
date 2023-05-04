@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Http\Resources\BookResource;
+use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -28,6 +29,21 @@ class BookController extends Controller
         //
     }
 
+    public function createNewBook(Request $request) {
+        
+        $book = new Book();
+
+        $book->name = $request->input('name');
+        $book->author_id = $request->input('author_id');
+        $book->genre_id = $request->input('genre_id');
+        $book->description = $request->input('description');
+        $book->user_id = $request->input('user_id');
+        $book->year = $request->input('year');
+
+        $book->save();
+        return response()->json($book);   
+
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -57,9 +73,19 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, $id)
     {
+
+    }
+
+    public function updateBookById(Request $request, $id) {
+
         $book = Book::find($id);
-        $book->update($request->all());
-        return $book;
+        $book->name = $request->input('name');
+        $book->author_id = $request->input('author_id');
+        $book->genre_id = $request->input('genre_id');
+        $book->description = $request->input('description');
+
+        $book->save();
+        return response()->json($book);
     }
 
     /**

@@ -14,7 +14,7 @@ class AuthorBookController extends Controller
         if(is_null($books)) {
             return response()->json('Data not found',404);
         }
-        return response()->json($books);
-
+        return response()->json($books); 
+        
     }
 }

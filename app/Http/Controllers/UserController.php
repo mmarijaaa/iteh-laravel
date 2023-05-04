@@ -36,14 +36,18 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($user_id)
+    public function show($user_id) 
     {
         $user = User::find($user_id);
         if(is_null($user)) {
             return response()->json('Data not found',404);
         }
-        return response()->json($user);
-        //return new UserResource($user);
+        return response()->json($user); 
+    }
+
+    public function showByIdRes(User $user) {
+        return new UserResource($user);
+        //prikazuje na osnovu resursa tj samo name i email
     }
 
     /**
@@ -61,6 +65,17 @@ class UserController extends Controller
     {
         //
     }
+
+    public function updateUserById(Request $request, $id) {
+
+        $user = User::find($id);
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        $user->save();
+        return response()->json($user); 
+    }
+
 
     /**
      * Remove the specified resource from storage.

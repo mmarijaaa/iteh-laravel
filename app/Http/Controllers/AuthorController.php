@@ -6,6 +6,7 @@ use App\Http\Resources\AuthorResource;
 use App\Models\Author;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
+use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
@@ -23,6 +24,17 @@ class AuthorController extends Controller
     public function create()
     {
         //
+    }
+
+    
+    public function createNewAuthor(Request $request) {  
+
+        $author = new Author();
+
+        $author->authorname = $request->input('authorname'); 
+
+        $author->save();
+        return response()->json($author);    
     }
 
     /**
