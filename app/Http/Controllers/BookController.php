@@ -20,8 +20,8 @@ class BookController extends Controller
     {
         //$users = Book::skip(2)->take(4)->get();
         //$users = Book::count();
-        $users = Book::all(); 
-        return $users;
+        $books = Book::all(); 
+        return $books;
     }
 
     /**

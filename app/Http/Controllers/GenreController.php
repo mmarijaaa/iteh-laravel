@@ -7,6 +7,8 @@ use App\Http\Requests\StoreGenreRequest;
 use App\Http\Requests\UpdateGenreRequest;
 use App\Http\Resources\GenreResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class GenreController extends Controller
 {
@@ -15,7 +17,8 @@ class GenreController extends Controller
      */
     public function index()
     {
-        //
+        $genres = Genre::all(); 
+        return $genres;
     }
 
     /**
@@ -39,9 +42,22 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGenreRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'genrename' => 'required|string|max:30',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $genre = Genre::create([
+            'genrename' => $request->genrename,
+            'user_id'=>Auth::user()->id
+        ]);
+
+        return response()->json(['Genre is succesfully created by user', new GenreResource($genre)]); 
     }
 
     /**
@@ -63,9 +79,21 @@ class GenreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGenreRequest $request, Genre $genre)
+    public function update(Request $request, Genre $genre)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'genrename' => 'required|string|max:70',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $genre->genrename = $request->genrename; 
+
+        $genre->save();
+
+        return response()->json(['Genre is succesfully updated by user', new GenreResource($genre)]);
     }
 
     /**
@@ -73,6 +101,8 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        $genre->delete();
+
+        return response()->json(['Genre is succesfully deleted by user']);
     }
 }

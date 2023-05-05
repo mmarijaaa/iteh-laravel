@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(5)->create();
+        User::factory(3)->create();
         
         Author::truncate();
         Genre::truncate();
@@ -26,14 +26,14 @@ class DatabaseSeeder extends Seeder
         $g2 = Genre::create(['name'=>'thriller']);
         $g3 = Genre::create(['name'=>'romance']);*/
 
-        $g1 = Genre::create(['genrename'=>'fantasy']);
-        $g2 = Genre::create(['genrename'=>'thriller']);
-        $g3 = Genre::create(['genrename'=>'romance']);
+        $g1 = Genre::create(['genrename'=>'fantasy','user_id'=>2]);
+        $g2 = Genre::create(['genrename'=>'thriller','user_id'=>3]);
+        $g3 = Genre::create(['genrename'=>'romance','user_id'=>1]);
        
-        $a1 = Author::create(['authorname'=>'J.K.Rowling']);
-        $a2 = Author::create(['authorname'=>'Agatha Christie']);
-        $a3 = Author::create(['authorname'=>'Jane Austen']);
-        $a4 = Author::create(['authorname'=>'F Scott Fitzgerald']);
+        $a1 = Author::create(['authorname'=>'J.K.Rowling','user_id'=>1]);
+        $a2 = Author::create(['authorname'=>'Agatha Christie','user_id'=>1]);
+        $a3 = Author::create(['authorname'=>'Jane Austen','user_id'=>3]);
+        $a4 = Author::create(['authorname'=>'F Scott Fitzgerald','user_id'=>2]);
         
         $b1 = Book::create([
             'name'=>'Harry Potter and the Prisoner of Azkaban',

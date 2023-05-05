@@ -7,6 +7,8 @@ use App\Models\Author;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthorController extends Controller
 {
@@ -15,7 +17,8 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        //
+        $authors = Author::all(); 
+        return $authors; 
     }
 
     /**
@@ -40,9 +43,23 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAuthorRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'authorname' => 'required|string|max:70',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $author = Author::create([
+            'authorname' => $request->authorname,
+            'user_id'=>Auth::user()->id
+        ]);
+
+        return response()->json(['Author is succesfully created by user', new AuthorResource($author)]);
+
     }
 
     /**
@@ -64,9 +81,22 @@ class AuthorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAuthorRequest $request, Author $author)
+    public function update(Request $request, Author $author)
     {
-        //
+        $validator = Validator ::make($request->all(), [
+            'authorname' => 'required|string|max:70',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $author->authorname = $request->authorname; 
+
+        $author->save();
+
+        return response()->json(['Author is succesfully updated by user', new AuthorResource($author)]);
+
     }
 
     /**
@@ -74,6 +104,8 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
+
+        return response()->json(['Author is succesfully deleted by user']);
     }
 }
