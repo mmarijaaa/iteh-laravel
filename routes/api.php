@@ -48,9 +48,6 @@ Route::resource('users',UserController::class);
 Route::get('users', [UserController::class, 'index'])->name('users.index');
 */
 
-
-
-
 /*ruta za azuriranje knjige book/3 i upisivanje params ISTO rade samo zavisi od put/patch 
 Route::put('book/{id}', [BookController::class, 'updateBookById']);
 Route::patch('book/{id}', [BookController::class, 'updateBookById']);
@@ -78,11 +75,14 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 //grupa ruta za pristup funckijama od strane samo autentifikovanog korisnika
+
 Route::group(['middleware' => ['auth:sanctum']], function() {
 
     Route::get('/profile', function(Request $request) {
         return auth()->user();
     });
+
+    //rute za kreiranje, izmenu i brisanje objekata 
 
     Route::resource('books', BookController::class)->only(['update','store','destroy']);
 
@@ -96,7 +96,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 //ovim rutama mogu pristupiti neulogovani korisnici
 
 Route::resource('books', BookController::class)->only(['index']);
-Route::resource('authors', AuthorController::class)->only(['index']);
+Route::resource('authors', AuthorController::class)->only(['index']); 
 Route::resource('genres', GenreController::class)->only(['index']);
 
 //ruta za prikazivanje knjiga odredjenog autora authors/3/books
