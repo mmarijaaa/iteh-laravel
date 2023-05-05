@@ -7,6 +7,9 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Http\Resources\BookResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
 {
@@ -47,9 +50,34 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookRequest $request)
+    public function store(Request $request)
     {
-        //
+        //ogranicenja unesenih podataka
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+            'author_id' => 'required',
+            'genre_id' => 'required',
+            'description' => 'required|string|max:200',
+            'year'=>'required'
+        ]);
+
+        //ako nije uspesna validacija
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        //ako je uspesna ubacuju se podaci za novu knjigu
+        $book = Book::create([
+            'name' => $request->name,
+            'author_id' => $request->author_id,
+            'genre_id' => $request->genre_id,
+            'description' => $request->description,
+            'year'=>$request->year,
+            'user_id'=>Auth::user()->id
+        ]);
+
+        return response()->json(['Book is succesfully created by user', new BookResource($book)]);
+
     }
 
     /**
@@ -71,9 +99,29 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBookRequest $request, $id)
+    public function update(Request $request, Book $book)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+            'author_id' => 'required',
+            'genre_id' => 'required',
+            'description' => 'required|max:200',
+            'year'=>'required'
+        ]);
 
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $book->name = $request->name;
+        $book->author_id = $request->author_id;
+        $book->genre_id = $request->genre_id;
+        $book->description = $request->description;
+        $book->year = $request->year;
+
+        $book->save();
+
+        return response()->json(['Book is succesfully updated by user', new BookResource($book)]);
     }
 
     public function updateBookById(Request $request, $id) {
@@ -93,6 +141,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return response()->json(['Book is succesfully deleted by user']);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserBookController;
 use App\Http\Controllers\AuthorBookController;
@@ -26,10 +27,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //ruta za prikazivanje knjige po id-ju /books/id
-Route::resource('books',BookController::class);
+//Route::resource('books',BookController::class);
 
 //ruta za prikaivanje svih knjiga /books
-Route::get('books', [BookController::class, 'index'])->name('books.index');
+//Route::get('books', [BookController::class, 'index'])->name('books.index');
 
 
 //ruta za prikazivanje knjiga konkretnog usera /users/3/books
@@ -63,6 +64,7 @@ Route::patch('book/{id}', [BookController::class, 'updateBookById']);
 Route::put('user/{id}', [UserController::class, 'updateUserById']);
 Route::patch('user/{id}', [UserController::class, 'updateUserById']);
 
+
 //ruta za dodavanje nove knjige u bazu
 Route::post('/createbook', [BookController::class, 'createNewBook']);
 
@@ -71,3 +73,26 @@ Route::post('/createauthor', [AuthorController::class, 'createNewAuthor']);
 
 //ruta za dodavanje novog zanra u bazu
 Route::post('/creategenre', [GenreController::class, 'createNewGenre']); 
+
+
+//ruta za registraciju
+Route::post('/register', [AuthController::class, 'register']);
+
+//ruta za login
+Route::post('/login', [AuthController::class, 'login']);
+
+
+//grupa ruta za pristup funckijama od strane samo autentifikovanog korisnika
+Route::group(['middleware' => ['auth:sanctum']], function() {
+
+    Route::get('/profile', function(Request $request) {
+        return auth()->user();
+    });
+
+    Route::resource('books', BookController::class)->only(['update','store','destroy']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+//ovoj ruti mogu pristupiti neulogovani korisnici
+Route::resource('books',BookController::class)->only(['index']);
